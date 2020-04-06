@@ -153,6 +153,7 @@ export default class AccountWithRelatedContacts extends LightningElement {
         }
         getAccountContacts() {
             this.loading = true;
+            this.showUnRelated = false;
             findAccountContacts( {
                 keyWord : this.accountContactName
             })
