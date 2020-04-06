@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>LWC Assignment</title>
+</head>
+<body>
+</body>
+<script>
+	function confirmation() {
+		var answer = confirm("Login to salesforce.com?")
+		if (answer) {
+			window.location = "https://lwc-sf-assignment.herokuapp.com/oauth2/auth?env=Production";
+		}
+		else {
+			alert("Thanks for sticking around!")
+		}
+	}
+	confirmation();
+</script>
+</html>

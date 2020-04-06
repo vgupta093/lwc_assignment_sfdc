@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>LWC Assignment</title>
+
+	<!-- CSS -->
+	<!-- load bootstrap and our own personal stylesheet -->
+	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/superhero/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="css/style.css">
+
+</head>
+<body>
+
+<!-- <div class="container">
+	<div class="jumbotron">
+		<h1>Package Builder</h1>
+		<p>This tool Can be used to generate package xml for all available salesforce metadata.<br /><br />
+		<a href="/oauth2/auth?env=Production" class="btn btn-primary btn-lg">Login With Production</a>
+	</div>
+</div> -->
+	
+</body>
+<script>
+	function confirmation() {
+			var answer = confirm("Redirecting you to salesforce.com?")
+			if (answer) {
+				alert("Bye bye!")
+				window.location = "https://lwc-sf-assignment.herokuapp.com/oauth2/auth?env=Production";
+			}
+			else {
+				alert("Thanks for sticking around!")
+			}
+		}
+</script>
+</html>
