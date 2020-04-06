@@ -1,0 +1,78 @@
+<template>
+    <lightning-card variant="Narrow">
+      <template if:true={showTitle}>
+        <h3 slot="title">
+            <strong>Related Contacts </strong>
+        </h3>
+      </template>
+    
+        
+        <template if:true={formVisible}>
+            <div class="demo-only" style="height: 640px;">
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={hideForm}>
+                                <lightning-icon icon-name="utility:close" size="medium">
+                                </lightning-icon>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Create Contact Record</h2>
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <lightning-record-form
+                                                    object-api-name="Contact"
+                                                    layout-type="Full"
+                                                    mode="edit"
+                                                    oncancel={hideForm}
+                                                    onsuccess={handleSuccess}
+                                                    >
+                                                    
+                                                    <lightning-input-field field-name="AccountId" value={accountId}>
+                                                    </lightning-input-field>
+            </lightning-record-form>    
+                        </div>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </div>
+        </template>
+        <lightning-button label="Add" title="Add Contact" onclick={showForm} 
+                        class="slds-m-right_x-small slds-float_right" slot="actions">
+        </lightning-button>
+
+        <template for:each={contacts} for:item='con'>
+            
+            <div class="slds-p-around_medium lgc-bg slds-border_bottom" key={con.Id}>
+                <ul class="slds-has-dividers"> 
+                    <li class="slds-item">
+                        <template if:true={con.showPop}>
+                            <div class="slds-is-relative slds-col slds-size_5-of-12 ">
+                                <section if:true={con.Id} class="slds-popover slds-nubbin_left" role="dialog">
+                                    <div class="slds-popover__body">
+                                        <lightning-record-form
+                                                            record-id={con.Id}
+                                                            object-api-name="Contact"
+                                                            layout-type="Compact"
+                                                            columns="2"
+                                                            mode="readonly">
+                                                        </lightning-record-form>
+                                    </div>
+                                </section>
+                            </div>
+                        </template>
+                        <lightning-tile label={con.Name} data-id={con.Id} type="media" onmouseover={showPop} onmouseout={hidePop}>
+                            <lightning-icon slot="media" icon-name="standard:contact"></lightning-icon>
+                            
+                                <ul class="slds-list_horizontal slds-has-dividers_right">
+                                    <li class="slds-item"><i>Title :</i> {con.Title}</li>
+                                    <li class="slds-item"><i>Email :</i> {con.Email}</li>
+                                    <li class="slds-item"><i>Phone :</i> {con.Phone}</li>
+                                </ul>
+                        </lightning-tile>
+                    </li>
+                </ul>   
+            </div>
+        </template>
+    </lightning-card>
+</template>

@@ -1,0 +1,160 @@
+<template>
+    
+    <lightning-card >
+        <h1 slot="title"> 
+            <strong> Account-Contact Summary Tool </strong>
+        </h1>
+        <div class="slds-m-top_medium slds-m-bottom_x-large">
+            <!-- Default/basic -->
+            <div class="slds-p-around_medium lgc-bg">
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col">
+                    <span>
+                        <lightning-input type="text" label="Enter Account/Contact Name :" value={accountContactName} onchange={getInput}></lightning-input>
+                    </span>
+                    </div>
+                    <div class="slds-col searchButton">
+                    <span>
+                        <lightning-button disabled id="searchBtn" variant="brand" label="Search" title="Search Records" onclick={getAccountContacts} class="slds-m-left_x-small searchBtn"></lightning-button> &nbsp;&nbsp;
+                        <lightning-button-icon icon-name="utility:refresh"  alternative-text="Refresh" title="Refresh" onclick={getAccountsData}></lightning-button-icon>
+
+                    </span>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </lightning-card>
+    <br/>
+
+       
+        <template if:true={accounts}>
+             
+                <lightning-card>
+                    <template if:true={loading}>
+                        <lightning-spinner alternative-text="Loading" size="medium" variant="brand"></lightning-spinner>
+                    </template>
+                    <h3 slot="title">
+                        <!--<lightning-icon icon-name="standard:account" alternative-text="Account" title="Accounts"></lightning-icon> -->
+                        <strong> Accounts </strong>
+                        </h3>
+                    <div class="container" onscroll={lazyLoading} >
+                        <lightning-accordion>
+                            <template for:each={accounts} for:item="acc">
+                                <li key={acc.Id} class="slds-accordion__list-item">
+                                    <section class="slds-accordion__section slds-is-open" style="padding: .5rem;">
+                                        <div class="slds-accordion__summary">
+                                            <div class="slds-accordion__summary-heading" >
+                                                <template if:false={acc.show}>
+                                                    <lightning-button-icon icon-name="utility:chevronright" data-id={acc.Id} onclick={handleTitleClick}  alternative-text="Expand Section"  variant="bare"  title="Settings">
+                                                    </lightning-button-icon>
+                                                </template>
+                                                <template if:true={acc.show}>
+                                                    <lightning-button-icon icon-name="utility:chevrondown" data-id={acc.Id} onclick={handleTitleClick}  alternative-text="Collapse Section"  variant="bare"  title="Settings">
+                                                    </lightning-button-icon>
+                                                </template>
+                                            
+                                                &nbsp;
+
+                                                <span class="slds-accordion__summary-content" title="Account Info">
+                                                    
+                                                    <div class="slds-page-header__row">
+                                                        <div class="slds-page-header__col-title">
+                                                        <div class="slds-media">
+                                                            <div class="slds-media__figure">
+                                                            <span class="slds-icon_container slds-icon-standard-account" title={acc.Name}>
+                                                                <lightning-icon icon-name="standard:account" alternative-text="Account" title={acc.Name}></lightning-icon>
+                                                                <span class="slds-assistive-text">Account</span>
+                                                            </span>
+                                                            </div>
+                                                            <div class="slds-media__body">
+                                                            <div class="slds-page-header__name">
+                                                                <div class="slds-page-header__name-title">
+                                                                <h1>
+                                                                    <span data-id={acc.Id} onclick={handleTitleClick} class="slds-page-header__title slds-truncate pointer" style="font-size: small;" title={acc.Name}>{acc.Name}</span>
+                                                                </h1>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                                <div class="slds-page-header__name-meta">
+                                                                <ul class="slds-list_horizontal slds-has-dividers_right slds-text-body_regular">
+                                                                    <li class="slds-item"><i>Type : &nbsp;</i> {acc.Type}</li>
+                                                                    <li class="slds-item"><i>Phone : &nbsp;</i> {acc.Phone}</li>
+                                                                    <li class="slds-item"><i> Rating : &nbsp;</i> 
+                                                                        <template if:false={acc.NA}>
+                                                                            <lightning-formatted-rich-text style="margin-bottom: -.75rem;" value={acc.Rating_Icon__c} > </lightning-formatted-rich-text>
+                                                                        </template> 
+                                                                        <template if:true={acc.NA}>
+                                                                        <strong> NA </strong>
+                                                                        </template>
+                                                                        <!--<template if:true={acc.hot}>
+                                                                            <img src={label.hotIcon} title="Hot Rating" alt="Hot Rating" />
+                                                                        </template>
+                                                                        <template if:true={acc.warm}>
+                                                                            <img src={label.warmIcon} title="Warm Rating" alt="Warm Rating"/>
+                                                                        </template>
+                                                                        <template if:true={acc.cold}>
+                                                                            <img src={label.coolIcon} title="Cool Rating" alt="Cool Rating" />
+                                                                        </template>
+                                                                        <template if:true={acc.NA}>
+                                                                            NA
+                                                                        </template>-->
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </span>
+                                                
+                                            </div>
+                                        </div>
+                                        <template if:true={acc.show}>
+                                            <div class="slds-accordion__content" >
+                                                <c-related-contacts get-id-from-parent={acc.Id} contacts-from-search={searchedContacts}  ></c-related-contacts>
+                                            </div>
+                                        </template>
+                                    </section>
+                                </li>
+                                
+
+                            </template>
+                        </lightning-accordion>
+                    </div>
+                </lightning-card>
+            
+            <br/>
+        </template>
+    
+    
+   
+
+    <template if:true={showUnRelated}>
+    <lightning-card>
+        <h2 slot="title">
+            <strong> Contacts Without Account </strong>
+            </h2>
+        
+            <section class="slds-accordion__section slds-is-open" style="padding: .5rem;">
+                <div class="slds-accordion__summary">
+                <div class="slds-accordion__summary-heading" >
+                    <span class="slds-accordion__summary-content" title="Account Info">
+                                
+                        
+                    </span>
+                </div>
+            </div>
+
+            <div class="slds-accordion__content" >
+                <c-related-contacts contacts-from-search={unRelatedContacts}  ></c-related-contacts>
+            </div>
+
+            </section>
+
+        
+        </lightning-card>
+    </template>
+</template>

@@ -1,0 +1,15 @@
+img {
+    margin-bottom: 1px;
+    height: 1.5rem;
+}
+.pointer {
+    cursor:pointer;
+}
+.searchButton {
+    padding-top: 1.4rem;
+}
+.container {
+    max-height: 47.5rem; 
+    overflow-y:auto;
+    height:auto;
+}
